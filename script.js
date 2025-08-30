@@ -2,10 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const addSection = document.getElementById('add-section');
     const viewSection = document.getElementById('view-section');
     const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalText = document.getElementById('modal-text');
+    const modalTitleDisplay = document.getElementById('modal-title-display');
+    const modalTitleEdit = document.getElementById('modal-title-edit');
+    const modalTextDisplay = document.getElementById('modal-text-display');
+    const modalTextEdit = document.getElementById('modal-text-edit');
     const modalStatus = document.getElementById('modal-status');
     const toggleFinished = document.getElementById('toggle-finished');
+    const editButton = document.getElementById('edit-button');
+    const saveButton = document.getElementById('save-button');
+    const cancelButton = document.getElementById('cancel-button');
     const closeModal = document.getElementById('close-modal');
     const titleInput = document.getElementById('title-input');
     const noteInput = document.getElementById('note-input');
@@ -19,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const STORAGE_KEY = 'basketballWorkouts';
 
     let currentIndex = -1;
+    let isEditing = false;
 
     function getNotes() {
         return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -46,11 +52,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const notes = getNotes();
         const note = notes[index];
         currentIndex = index;
-        modalTitle.textContent = note.title;
-        modalText.textContent = note.text;
+        modalTitleDisplay.textContent = note.title;
+        modalTitleEdit.value = note.title;
+        modalTextDisplay.textContent = note.text;
+        modalTextEdit.value = note.text;
         modalStatus.textContent = note.finished ? 'Status: Finished' : 'Status: Not Finished';
         toggleFinished.textContent = note.finished ? 'Mark as Unfinished' : 'Mark as Finished';
+        setEditMode(false);
         modal.style.display = 'block';
+    }
+
+    function setEditMode(editing) {
+        isEditing = editing;
+        if (editing) {
+            modalTitleDisplay.style.display = 'none';
+            modalTitleEdit.style.display = 'block';
+            modalTextDisplay.style.display = 'none';
+            modalTextEdit.style.display = 'block';
+            editButton.style.display = 'none';
+            saveButton.style.display = 'inline-block';
+            cancelButton.style.display = 'inline-block';
+        } else {
+            modalTitleDisplay.style.display = 'block';
+            modalTitleEdit.style.display = 'none';
+            modalTextDisplay.style.display = 'block';
+            modalTextEdit.style.display = 'none';
+            editButton.style.display = 'inline-block';
+            saveButton.style.display = 'none';
+            cancelButton.style.display = 'none';
+        }
     }
 
     addButton.addEventListener('click', () => {
@@ -80,12 +110,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     toggleFinished.addEventListener('click', () => {
-        if (currentIndex !== -1) {
+        if (currentIndex !== -1 && !isEditing) {
             const notes = getNotes();
             notes[currentIndex].finished = !notes[currentIndex].finished;
             saveNotes(notes);
             showDetail(currentIndex); // Refresh modal
             renderNotes(); // Refresh list
+        }
+    });
+
+    editButton.addEventListener('click', () => {
+        setEditMode(true);
+    });
+
+    saveButton.addEventListener('click', () => {
+        if (currentIndex !== -1) {
+            const notes = getNotes();
+            const newTitle = modalTitleEdit.value.trim();
+            const newText = modalTextEdit.value.trim();
+            if (newTitle && newText) {
+                notes[currentIndex].title = newTitle;
+                notes[currentIndex].text = newText;
+                saveNotes(notes);
+                showDetail(currentIndex); // Refresh modal with new values
+                renderNotes(); // Refresh list
+            } else {
+                alert('Title and content cannot be empty.');
+            }
+        }
+    });
+
+    cancelButton.addEventListener('click', () => {
+        if (currentIndex !== -1) {
+            showDetail(currentIndex); // Reset to original values
         }
     });
 

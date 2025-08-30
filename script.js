@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const addSection = document.getElementById('add-section');
     const viewSection = document.getElementById('view-section');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalText = document.getElementById('modal-text');
+    const modalStatus = document.getElementById('modal-status');
+    const toggleFinished = document.getElementById('toggle-finished');
+    const closeModal = document.getElementById('close-modal');
+    const titleInput = document.getElementById('title-input');
     const noteInput = document.getElementById('note-input');
     const addButton = document.getElementById('add-button');
     const viewButton = document.getElementById('view-button');
@@ -10,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const notesList = document.getElementById('notes-list');
 
     const STORAGE_KEY = 'basketballWorkouts';
+
+    let currentIndex = -1;
 
     function getNotes() {
         return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -24,27 +33,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const notes = getNotes();
         notes.forEach((note, index) => {
             const li = document.createElement('li');
-            li.textContent = note.text;
+            li.textContent = note.title;
             if (note.finished) {
                 li.classList.add('finished');
             }
-            li.addEventListener('click', () => {
-                notes[index].finished = !notes[index].finished;
-                saveNotes(notes);
-                renderNotes();
-            });
+            li.addEventListener('click', () => showDetail(index));
             notesList.appendChild(li);
         });
     }
 
+    function showDetail(index) {
+        const notes = getNotes();
+        const note = notes[index];
+        currentIndex = index;
+        modalTitle.textContent = note.title;
+        modalText.textContent = note.text;
+        modalStatus.textContent = note.finished ? 'Status: Finished' : 'Status: Not Finished';
+        toggleFinished.textContent = note.finished ? 'Mark as Unfinished' : 'Mark as Finished';
+        modal.style.display = 'block';
+    }
+
     addButton.addEventListener('click', () => {
+        const title = titleInput.value.trim();
         const text = noteInput.value.trim();
-        if (text) {
+        if (title && text) {
             const notes = getNotes();
-            notes.push({ text, finished: false });
+            notes.push({ title, text, finished: false });
             saveNotes(notes);
+            titleInput.value = '';
             noteInput.value = '';
             alert('Note added!');
+        } else {
+            alert('Please enter both title and note content.');
         }
     });
 
@@ -57,6 +77,28 @@ document.addEventListener('DOMContentLoaded', () => {
     backButton.addEventListener('click', () => {
         viewSection.style.display = 'none';
         addSection.style.display = 'block';
+    });
+
+    toggleFinished.addEventListener('click', () => {
+        if (currentIndex !== -1) {
+            const notes = getNotes();
+            notes[currentIndex].finished = !notes[currentIndex].finished;
+            saveNotes(notes);
+            showDetail(currentIndex); // Refresh modal
+            renderNotes(); // Refresh list
+        }
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+        currentIndex = -1;
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            currentIndex = -1;
+        }
     });
 
     resetButton.addEventListener('click', reset);

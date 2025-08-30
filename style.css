@@ -3,26 +3,24 @@ body {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #000; /* Black background */
+    color: white; /* White text for visibility */
 }
 
 h1, h2 {
     text-align: center;
+    color: white;
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-}
-
+input[type="text"],
 textarea {
     width: 100%;
-    height: 150px;
-    margin-bottom: 10px;
     padding: 10px;
+    margin-bottom: 10px;
     box-sizing: border-box;
+    background-color: #222; /* Dark gray for inputs */
+    color: white;
+    border: 1px solid #555;
 }
 
 button {
@@ -30,7 +28,7 @@ button {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #007bff;
+    background-color: #007bff; /* Blue buttons */
     color: white;
     border: none;
     cursor: pointer;
@@ -46,16 +44,21 @@ button:hover {
 }
 
 #notes-list li {
-    background-color: white;
+    background-color: #333; /* Dark gray for list items */
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #555;
     cursor: pointer;
+    color: white;
 }
 
 #notes-list li.finished {
     text-decoration: line-through;
     color: gray;
+}
+
+#modal-content {
+    color: white;
 }
 
 #modal-content button {
@@ -64,9 +67,26 @@ button:hover {
 }
 
 #modal-content button:last-child {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Red for close */
 }
 
 #modal-content button:last-child:hover {
     background-color: #c82333;
+}
+
+#modal-content #save-button {
+    background-color: #28a745; /* Green for save */
+}
+
+#modal-content #save-button:hover {
+    background-color: #218838;
+}
+
+#modal-content #cancel-button {
+    background-color: #ffc107; /* Yellow for cancel */
+    color: black;
+}
+
+#modal-content #cancel-button:hover {
+    background-color: #e0a800;
 }

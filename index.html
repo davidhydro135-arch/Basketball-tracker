@@ -9,6 +9,7 @@
 <body>
     <div id="add-section">
         <h1>Add Basketball Workout Note</h1>
+        <input id="title-input" type="text" placeholder="Enter note title...">
         <textarea id="note-input" placeholder="Enter your training notes here..."></textarea>
         <button id="add-button">Add Note</button>
         <button id="view-button">View All Notes</button>
@@ -20,6 +21,16 @@
         <ul id="notes-list"></ul>
         <button id="back-button">Back to Add</button>
         <button id="reset-button-view">Reset All</button>
+    </div>
+
+    <div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div id="modal-content" style="background: white; margin: 15% auto; padding: 20px; width: 80%; max-width: 600px; border-radius: 5px;">
+            <h2 id="modal-title"></h2>
+            <p id="modal-text"></p>
+            <p id="modal-status"></p>
+            <button id="toggle-finished">Mark as Finished</button>
+            <button id="close-modal">Close</button>
+        </div>
     </div>
 
     <script src="script.js"></script>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Workout Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="add-section">
+        <h1>Add Basketball Workout Note</h1>
+        <textarea id="note-input" placeholder="Enter your training notes here..."></textarea>
+        <button id="add-button">Add Note</button>
+        <button id="view-button">View All Notes</button>
+        <button id="reset-button">Reset All</button>
+    </div>
+
+    <div id="view-section" style="display: none;">
+        <h1>Your Workout Notes</h1>
+        <ul id="notes-list"></ul>
+        <button id="back-button">Back to Add</button>
+        <button id="reset-button-view">Reset All</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
